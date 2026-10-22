@@ -1,0 +1,141 @@
+Captured commands and outputs. ANSI disabled; absolute project prefix normalized to {project}.
+Targets and password/AD inputs below are entirely local or synthetic.
+
+$ scopeweaver --version
+ScopeWeaver 1.0.0rc1
+
+
+Exit code: 0
+
+$ scopeweaver modules
+╭────────────────────────────────╮
+│ S C O P E W E A V E R          │
+│ Authorized security assessment │
+│ 1.0.0rc1                       │
+╰────────────────────────────────╯
+                                    Modules                                     
+┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Command               ┃ Purpose                                              ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ run --module recon    │ DNS, WHOIS, HTTP hints, TLS, TCP                     │
+│ run --module network  │ TCP connect scan and service inventory               │
+│ run --module web      │ Read-only web configuration audit                    │
+│ ad audit              │ Offline AD policy, groups, delegation and ACE review │
+│ passwords audit / lab │ Synthetic password and policy analysis               │
+│ report                │ JSON, Markdown and HTML reporting                    │
+└───────────────────────┴──────────────────────────────────────────────────────┘
+
+
+Exit code: 0
+
+$ scopeweaver validate --config examples/scope-loopback.json
+Valid configuration: 2 networks; 0 domain rules; 200 operation budget.
+
+
+Exit code: 0
+
+$ scopeweaver lab --output reports/repro-lab
+╭────────────────────────────────╮
+│ S C O P E W E A V E R          │
+│ Authorized security assessment │
+│ 1.0.0rc1                       │
+╰────────────────────────────────╯
+  Assessment results   
+┏━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Severity ┃ Findings ┃
+┡━━━━━━━━━━╇━━━━━━━━━━┩
+│ Critical │        0 │
+│ High     │        0 │
+│ Medium   │        2 │
+│ Low      │        4 │
+│ Info     │        0 │
+└──────────┴──────────┘
+passwords: completed — synthetic-dataset
+{project}/reports/repro-lab/assessment.json
+{project}/reports/repro-lab/assessment.md
+{project}/reports/repro-lab/assessment.html
+
+
+Exit code: 0
+
+$ scopeweaver ad audit --input examples/ad-synthetic.json --output reports/repro-ad
+  Assessment results   
+┏━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Severity ┃ Findings ┃
+┡━━━━━━━━━━╇━━━━━━━━━━┩
+│ Critical │        0 │
+│ High     │        5 │
+│ Medium   │        5 │
+│ Low      │        0 │
+│ Info     │        2 │
+└──────────┴──────────┘
+ad: completed — lab.example
+{project}/reports/repro-ad/assessment.json
+{project}/reports/repro-ad/assessment.md
+{project}/reports/repro-ad/assessment.html
+
+
+Exit code: 0
+
+$ scopeweaver passwords audit --input examples/passwords-synthetic.json --output reports/repro-passwords
+  Assessment results   
+┏━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Severity ┃ Findings ┃
+┡━━━━━━━━━━╇━━━━━━━━━━┩
+│ Critical │        0 │
+│ High     │        0 │
+│ Medium   │        2 │
+│ Low      │        4 │
+│ Info     │        0 │
+└──────────┴──────────┘
+passwords: completed — synthetic-dataset
+{project}/reports/repro-passwords/assessment.json
+{project}/reports/repro-passwords/assessment.md
+{project}/reports/repro-passwords/assessment.html
+
+
+Exit code: 0
+
+$ scopeweaver run --config examples/scope-loopback.json --target http://127.0.0.1:8000/ --module web --module network --output reports/repro-web
+╭────────────────────────────────╮
+│ S C O P E W E A V E R          │
+│ Authorized security assessment │
+│ 1.0.0rc1                       │
+╰────────────────────────────────╯
+  web: completed
+  Assessment results   
+┏━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Severity ┃ Findings ┃
+┡━━━━━━━━━━╇━━━━━━━━━━┩
+│ Critical │        0 │
+│ High     │        0 │
+│ Medium   │        2 │
+│ Low      │        4 │
+│ Info     │        3 │
+└──────────┴──────────┘
+network: completed — 127.0.0.1
+web: completed — http://127.0.0.1:8000/
+{project}/reports/repro-web/assessment.json
+{project}/reports/repro-web/assessment.md
+{project}/reports/repro-web/assessment.html
+
+
+Exit code: 0
+
+$ scopeweaver report reports/repro-web/assessment.json --format html --output reports/repro-export
+  Assessment results   
+┏━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Severity ┃ Findings ┃
+┡━━━━━━━━━━╇━━━━━━━━━━┩
+│ Critical │        0 │
+│ High     │        0 │
+│ Medium   │        2 │
+│ Low      │        4 │
+│ Info     │        3 │
+└──────────┴──────────┘
+network: completed — 127.0.0.1
+web: completed — http://127.0.0.1:8000/
+{project}/reports/repro-export/assessment.html
+
+
+Exit code: 0

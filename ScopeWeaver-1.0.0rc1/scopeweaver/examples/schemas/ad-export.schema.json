@@ -1,0 +1,359 @@
+{
+  "$defs": {
+    "ADAccount": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "kind": {
+          "default": "user",
+          "enum": [
+            "user",
+            "computer",
+            "service",
+            "domain_controller"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "user_account_control": {
+          "minimum": 0,
+          "title": "User Account Control",
+          "type": "integer"
+        },
+        "encryption_types": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Encryption Types"
+        },
+        "admin_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Admin Count"
+        },
+        "spns": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "title": "Spns",
+          "type": "array"
+        },
+        "allowed_to_delegate_to": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "title": "Allowed To Delegate To",
+          "type": "array"
+        },
+        "rbcd_principals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "title": "Rbcd Principals",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "enabled",
+        "user_account_control"
+      ],
+      "title": "ADAccount",
+      "type": "object"
+    },
+    "ADGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "privileged": {
+          "title": "Privileged",
+          "type": "boolean"
+        },
+        "members": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100000,
+          "title": "Members",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "privileged"
+      ],
+      "title": "ADGroup",
+      "type": "object"
+    },
+    "ADPermission": {
+      "additionalProperties": false,
+      "properties": {
+        "principal": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Principal",
+          "type": "string"
+        },
+        "target": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "rights": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Rights",
+          "type": "array"
+        },
+        "access_type": {
+          "enum": [
+            "Allow",
+            "Deny"
+          ],
+          "title": "Access Type",
+          "type": "string"
+        },
+        "privileged_target": {
+          "title": "Privileged Target",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "principal",
+        "target",
+        "rights",
+        "access_type",
+        "privileged_target"
+      ],
+      "title": "ADPermission",
+      "type": "object"
+    },
+    "PasswordPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum_length": {
+          "anyOf": [
+            {
+              "maximum": 1024,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum Length"
+        },
+        "maximum_length": {
+          "anyOf": [
+            {
+              "maximum": 10000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Length"
+        },
+        "mfa_required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mfa Required"
+        },
+        "blocklist_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Blocklist Enabled"
+        },
+        "rate_limit_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rate Limit Enabled"
+        },
+        "composition_required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Composition Required"
+        },
+        "periodic_rotation_required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Periodic Rotation Required"
+        },
+        "reversible_encryption": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reversible Encryption"
+        },
+        "lockout_threshold": {
+          "anyOf": [
+            {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lockout Threshold"
+        }
+      },
+      "title": "PasswordPolicy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "domain": {
+      "maxLength": 253,
+      "minLength": 1,
+      "title": "Domain",
+      "type": "string"
+    },
+    "policy": {
+      "$ref": "#/$defs/PasswordPolicy"
+    },
+    "accounts": {
+      "items": {
+        "$ref": "#/$defs/ADAccount"
+      },
+      "maxItems": 100000,
+      "title": "Accounts",
+      "type": "array"
+    },
+    "groups": {
+      "items": {
+        "$ref": "#/$defs/ADGroup"
+      },
+      "maxItems": 10000,
+      "title": "Groups",
+      "type": "array"
+    },
+    "permissions": {
+      "items": {
+        "$ref": "#/$defs/ADPermission"
+      },
+      "maxItems": 100000,
+      "title": "Permissions",
+      "type": "array"
+    },
+    "collection_notes": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 100,
+      "title": "Collection Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "domain",
+    "policy"
+  ],
+  "title": "ADExport",
+  "type": "object"
+}

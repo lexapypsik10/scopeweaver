@@ -1,0 +1,324 @@
+{
+  "schema_version": "1.0",
+  "assessment": {
+    "schema_version": "1.0",
+    "tool": "ScopeWeaver",
+    "version": "1.0.0rc1",
+    "run_id": "7ac0a989-b305-45d8-90d8-31b03121af2f",
+    "started_at": "2026-10-22T14:28:42.836274Z",
+    "finished_at": "2026-10-22T14:28:44.842471Z",
+    "scope": {
+      "domains": [],
+      "networks": [
+        "127.0.0.1/32",
+        "::1/128"
+      ],
+      "ports": [
+        8000,
+        8443
+      ],
+      "dns": {
+        "servers": [],
+        "port": 53
+      },
+      "whois": {}
+    },
+    "results": [
+      {
+        "module": "network",
+        "target": "127.0.0.1",
+        "status": "completed",
+        "findings": [],
+        "services": [
+          {
+            "host": "127.0.0.1",
+            "ip": "127.0.0.1",
+            "port": 8000,
+            "transport": "tcp",
+            "state": "open",
+            "name": "unknown",
+            "detection": "port convention only; not verified",
+            "banner": null,
+            "metadata": {}
+          }
+        ],
+        "observations": {
+          "technique": "TCP connect; no authentication; passive banners",
+          "attempted": 1,
+          "unattempted": 0
+        },
+        "errors": []
+      },
+      {
+        "module": "web",
+        "target": "http://127.0.0.1:8000/",
+        "status": "completed",
+        "findings": [
+          {
+            "id": "SW-d8ddc370c1bbd4d4",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Content type sniffing is not disabled",
+            "severity": "Low",
+            "description": "The response lacks an effective X-Content-Type-Options policy.",
+            "evidence": {
+              "X-Content-Type-Options": ""
+            },
+            "remediation": "Send X-Content-Type-Options: nosniff and accurate Content-Type values.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/693.html"
+            ],
+            "cwe": [
+              "CWE-693"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-08bb8f9ab63bcc44",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "HTML response has no enforced CSP",
+            "severity": "Low",
+            "description": "CSP defense in depth is absent. This is not evidence of an XSS vulnerability.",
+            "evidence": {
+              "Content-Type": "text/html; charset=utf-8"
+            },
+            "remediation": "Deploy a tested nonce- or hash-based Content Security Policy.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/693.html"
+            ],
+            "cwe": [
+              "CWE-693"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-6f395dd25146a71e",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "HTML response has no framing restriction",
+            "severity": "Low",
+            "description": "No X-Frame-Options or CSP frame-ancestors directive was observed.",
+            "evidence": {
+              "X-Frame-Options": "",
+              "frame-ancestors": "absent"
+            },
+            "remediation": "Set CSP frame-ancestors to the required allowlist or use X-Frame-Options: DENY.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/1021.html"
+            ],
+            "cwe": [
+              "CWE-1021"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-d1c5b566ba50e84d",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Referrer policy relies on browser defaults",
+            "severity": "Info",
+            "description": "An explicit policy can make referrer handling consistent across clients.",
+            "evidence": {
+              "Referrer-Policy": "absent"
+            },
+            "remediation": "Set Referrer-Policy: strict-origin-when-cross-origin or a stricter suitable policy.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/200.html"
+            ],
+            "cwe": [
+              "CWE-200"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-4fcf0c5c7c09e101",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Cookie lab_session needs security flag review",
+            "severity": "Low",
+            "description": "Cookie attributes may permit unnecessary exposure. Confirm whether this cookie contains sensitive state; values are never recorded.",
+            "evidence": {
+              "cookie_name": "lab_session",
+              "flags": {
+                "secure": false,
+                "httponly": false,
+                "samesite": "absent"
+              },
+              "review": [
+                "Secure",
+                "HttpOnly",
+                "SameSite"
+              ]
+            },
+            "remediation": "Use Secure for HTTPS cookies, HttpOnly for cookies not needed by JavaScript, and an appropriate explicit SameSite policy.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/614.html"
+            ],
+            "cwe": [
+              "CWE-614"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-d57277ab8930232c",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Directory index exposed",
+            "severity": "Medium",
+            "description": "The response contains a conventional directory autoindex heading.",
+            "evidence": {
+              "matched_heading": "Index of /",
+              "status": 200
+            },
+            "remediation": "Disable directory autoindex and restrict access to unintended files.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/548.html"
+            ],
+            "cwe": [
+              "CWE-548"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-f41c2a8308ed6473",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Server software metadata advertised",
+            "severity": "Info",
+            "description": "Headers disclose self-reported server software; this does not establish vulnerable versions.",
+            "evidence": {
+              "Server": "ScopeWeaver-Lab/1.0"
+            },
+            "remediation": "Minimize unnecessary version headers and keep software patched.",
+            "references": [
+              "https://owasp.org/www-project-secure-headers/",
+              "https://cwe.mitre.org/data/definitions/200.html"
+            ],
+            "cwe": [
+              "CWE-200"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-337a49ca8e456034",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Arbitrary origins accepted with credentials",
+            "severity": "Medium",
+            "description": "Two distinct untrusted origins were reflected with credentials enabled. Exposure of authenticated data still requires application-specific validation.",
+            "evidence": {
+              "probes": [
+                {
+                  "origin": "https://scopeweaver-a.invalid",
+                  "allow_origin": "https://scopeweaver-a.invalid",
+                  "allow_credentials": "true"
+                },
+                {
+                  "origin": "https://scopeweaver-b.invalid",
+                  "allow_origin": "https://scopeweaver-b.invalid",
+                  "allow_credentials": "true"
+                }
+              ]
+            },
+            "remediation": "Validate origins against an exact trusted allowlist and limit credentialed CORS.",
+            "references": [
+              "https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny",
+              "https://cwe.mitre.org/data/definitions/942.html"
+            ],
+            "cwe": [
+              "CWE-942"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          },
+          {
+            "id": "SW-73514b4bb9797f9c",
+            "module": "web",
+            "target": "http://127.0.0.1:8000/",
+            "title": "Advertised HTTP methods require review",
+            "severity": "Info",
+            "description": "OPTIONS advertises methods which may be legitimate API operations. No state-changing method was executed and authorization was not tested.",
+            "evidence": {
+              "advertised": [
+                "PUT"
+              ],
+              "executed": [
+                "GET",
+                "OPTIONS"
+              ]
+            },
+            "remediation": "Restrict methods and enforce authentication and authorization where required.",
+            "references": [
+              "https://owasp.org/www-project-web-security-testing-guide/"
+            ],
+            "cwe": [
+              "CWE-749"
+            ],
+            "cvss": null,
+            "cvss_vector": null,
+            "confidence": "observed configuration; impact needs contextual review"
+          }
+        ],
+        "services": [],
+        "observations": {
+          "http": {
+            "status": 200,
+            "ip": "127.0.0.1",
+            "body_truncated": false,
+            "redirect_followed": false,
+            "cookie_values_stored": false
+          },
+          "http_methods": {
+            "status": 204,
+            "advertised": [
+              "GET",
+              "OPTIONS",
+              "PUT"
+            ],
+            "verified_by_execution": false
+          }
+        },
+        "errors": []
+      }
+    ],
+    "interrupted": false,
+    "network_operations": 5
+  },
+  "summary": {
+    "findings": 9,
+    "severity": {
+      "Critical": 0,
+      "High": 0,
+      "Medium": 2,
+      "Low": 4,
+      "Info": 3
+    },
+    "open_services": 1,
+    "module_results": 2,
+    "incomplete_results": 0,
+    "interrupted": false,
+    "assurance": "Observed configuration only; absence of findings is not proof of security."
+  }
+}

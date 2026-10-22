@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "domain": "lab.example",
+  "policy": {
+    "minimum_length": 8,
+    "mfa_required": false,
+    "reversible_encryption": true,
+    "lockout_threshold": 0
+  },
+  "accounts": [
+    {
+      "id": "S-1-5-21-111-222-333-1101",
+      "name": "svc-fixture",
+      "kind": "service",
+      "enabled": true,
+      "user_account_control": 4719136,
+      "encryption_types": 4,
+      "spns": [
+        "HTTP/web.lab.example"
+      ],
+      "allowed_to_delegate_to": [
+        "cifs/files.lab.example"
+      ]
+    },
+    {
+      "id": "S-1-5-21-111-222-333-1102",
+      "name": "admin-fixture",
+      "kind": "user",
+      "enabled": true,
+      "user_account_control": 512
+    }
+  ],
+  "groups": [
+    {
+      "id": "S-1-5-21-111-222-333-512",
+      "name": "Synthetic Domain Admins",
+      "privileged": true,
+      "members": [
+        "S-1-5-21-111-222-333-2100"
+      ]
+    },
+    {
+      "id": "S-1-5-21-111-222-333-2100",
+      "name": "Synthetic nested group",
+      "privileged": false,
+      "members": [
+        "S-1-5-21-111-222-333-1101",
+        "S-1-5-21-111-222-333-1102"
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "principal": "S-1-5-11",
+      "target": "S-1-5-21-111-222-333-512",
+      "rights": [
+        "WriteDacl"
+      ],
+      "access_type": "Allow",
+      "privileged_target": true
+    }
+  ],
+  "collection_notes": [
+    "Entirely synthetic example; no real directory was queried."
+  ]
+}

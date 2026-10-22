@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>ScopeWeaver assessment</title><style>
+:root{color-scheme:light}*{box-sizing:border-box}body{font:15px/1.6 system-ui,sans-serif;
+color:#202c3a;background:#f1f5f9;margin:0}main{max-width:1100px;margin:auto;padding:36px 24px}
+header{background:#122335;color:#fff;padding:30px;border-radius:12px}h1,h2,h3{line-height:1.25}
+.muted{color:#526579}.cards{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+.card,article{background:white;padding:18px 22px;border:1px solid #dce3ec;border-radius:9px}
+.card strong{display:block;font-size:26px}article{margin:16px 0;break-inside:avoid}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf2f7;padding:14px;border-radius:6px}
+table{width:100%;border-collapse:collapse;background:white}th,td{padding:9px 12px;text-align:left;
+border-bottom:1px solid #dce3ec;overflow-wrap:anywhere}a{color:#155e75;overflow-wrap:anywhere}
+.High,.Critical{color:#ac1927}.Medium{color:#8d4b02}.Low{color:#1355a5}.Info{color:#526579}
+@media print{body{background:white}main{padding:0}header{color:#122335;background:white;border-bottom:3px solid}}
+</style></head><body><main><header><p>SCOPEWEAVER / SECURITY ASSESSMENT</p>
+<h1>Executive Summary</h1><p>Run 7ac0a989-b305-45d8-90d8-31b03121af2f · 1.0.0rc1</p>
+<p>2026-10-22T14:28:42.836274+00:00 → 2026-10-22 14:28:44.842471+00:00</p></header>
+<div class="cards"><div class="card Critical">
+<strong>0</strong>Critical</div><div class="card High">
+<strong>0</strong>High</div><div class="card Medium">
+<strong>2</strong>Medium</div><div class="card Low">
+<strong>4</strong>Low</div><div class="card Info">
+<strong>3</strong>Info</div></div>
+<p>9 findings · 1 open services ·
+0 incomplete module results · 5 network operations</p>
+<p><strong>Interrupted: False</strong></p><p class="muted">Observed configuration only; absence of findings is not proof of security.</p>
+<h2>Scope</h2><pre>{
+  &#34;domains&#34;: [],
+  &#34;networks&#34;: [
+    &#34;127.0.0.1/32&#34;,
+    &#34;::1/128&#34;
+  ],
+  &#34;ports&#34;: [
+    8000,
+    8443
+  ],
+  &#34;dns&#34;: {
+    &#34;servers&#34;: [],
+    &#34;port&#34;: 53
+  },
+  &#34;whois&#34;: {}
+}</pre><h2>Service Inventory</h2>
+<table><thead><tr><th>Host / IP</th><th>Port</th><th>State</th><th>Service / confidence</th></tr></thead>
+<tbody><tr><td>127.0.0.1<br>127.0.0.1</td><td>8000/tcp</td>
+<td>open</td><td>unknown<br>port convention only; not verified</td></tr></tbody></table>
+<h2>Findings</h2><article>
+<p class="Medium"><strong>Medium</strong> · SW-337a49ca8e456034</p>
+<h3>Arbitrary origins accepted with credentials</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>Two distinct untrusted origins were reflected with credentials enabled. Exposure of authenticated data still requires application-specific validation.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;probes&#34;: [
+    {
+      &#34;origin&#34;: &#34;https://scopeweaver-a.invalid&#34;,
+      &#34;allow_origin&#34;: &#34;https://scopeweaver-a.invalid&#34;,
+      &#34;allow_credentials&#34;: &#34;true&#34;
+    },
+    {
+      &#34;origin&#34;: &#34;https://scopeweaver-b.invalid&#34;,
+      &#34;allow_origin&#34;: &#34;https://scopeweaver-b.invalid&#34;,
+      &#34;allow_credentials&#34;: &#34;true&#34;
+    }
+  ]
+}</pre><h4>Remediation</h4><p>Validate origins against an exact trusted allowlist and limit credentialed CORS.</p>
+<p>CWE-942 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny" rel="noreferrer">https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/942.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/942.html</a></li></ul>
+</article><article>
+<p class="Medium"><strong>Medium</strong> · SW-d57277ab8930232c</p>
+<h3>Directory index exposed</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>The response contains a conventional directory autoindex heading.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;matched_heading&#34;: &#34;Index of /&#34;,
+  &#34;status&#34;: 200
+}</pre><h4>Remediation</h4><p>Disable directory autoindex and restrict access to unintended files.</p>
+<p>CWE-548 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/548.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/548.html</a></li></ul>
+</article><article>
+<p class="Low"><strong>Low</strong> · SW-08bb8f9ab63bcc44</p>
+<h3>HTML response has no enforced CSP</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>CSP defense in depth is absent. This is not evidence of an XSS vulnerability.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;Content-Type&#34;: &#34;text/html; charset=utf-8&#34;
+}</pre><h4>Remediation</h4><p>Deploy a tested nonce- or hash-based Content Security Policy.</p>
+<p>CWE-693 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/693.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/693.html</a></li></ul>
+</article><article>
+<p class="Low"><strong>Low</strong> · SW-4fcf0c5c7c09e101</p>
+<h3>Cookie lab_session needs security flag review</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>Cookie attributes may permit unnecessary exposure. Confirm whether this cookie contains sensitive state; values are never recorded.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;cookie_name&#34;: &#34;lab_session&#34;,
+  &#34;flags&#34;: {
+    &#34;secure&#34;: false,
+    &#34;httponly&#34;: false,
+    &#34;samesite&#34;: &#34;absent&#34;
+  },
+  &#34;review&#34;: [
+    &#34;Secure&#34;,
+    &#34;HttpOnly&#34;,
+    &#34;SameSite&#34;
+  ]
+}</pre><h4>Remediation</h4><p>Use Secure for HTTPS cookies, HttpOnly for cookies not needed by JavaScript, and an appropriate explicit SameSite policy.</p>
+<p>CWE-614 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/614.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/614.html</a></li></ul>
+</article><article>
+<p class="Low"><strong>Low</strong> · SW-6f395dd25146a71e</p>
+<h3>HTML response has no framing restriction</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>No X-Frame-Options or CSP frame-ancestors directive was observed.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;X-Frame-Options&#34;: &#34;&#34;,
+  &#34;frame-ancestors&#34;: &#34;absent&#34;
+}</pre><h4>Remediation</h4><p>Set CSP frame-ancestors to the required allowlist or use X-Frame-Options: DENY.</p>
+<p>CWE-1021 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/1021.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/1021.html</a></li></ul>
+</article><article>
+<p class="Low"><strong>Low</strong> · SW-d8ddc370c1bbd4d4</p>
+<h3>Content type sniffing is not disabled</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>The response lacks an effective X-Content-Type-Options policy.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;X-Content-Type-Options&#34;: &#34;&#34;
+}</pre><h4>Remediation</h4><p>Send X-Content-Type-Options: nosniff and accurate Content-Type values.</p>
+<p>CWE-693 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/693.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/693.html</a></li></ul>
+</article><article>
+<p class="Info"><strong>Info</strong> · SW-73514b4bb9797f9c</p>
+<h3>Advertised HTTP methods require review</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>OPTIONS advertises methods which may be legitimate API operations. No state-changing method was executed and authorization was not tested.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;advertised&#34;: [
+    &#34;PUT&#34;
+  ],
+  &#34;executed&#34;: [
+    &#34;GET&#34;,
+    &#34;OPTIONS&#34;
+  ]
+}</pre><h4>Remediation</h4><p>Restrict methods and enforce authentication and authorization where required.</p>
+<p>CWE-749 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-web-security-testing-guide/" rel="noreferrer">https://owasp.org/www-project-web-security-testing-guide/</a></li></ul>
+</article><article>
+<p class="Info"><strong>Info</strong> · SW-d1c5b566ba50e84d</p>
+<h3>Referrer policy relies on browser defaults</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>An explicit policy can make referrer handling consistent across clients.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;Referrer-Policy&#34;: &#34;absent&#34;
+}</pre><h4>Remediation</h4><p>Set Referrer-Policy: strict-origin-when-cross-origin or a stricter suitable policy.</p>
+<p>CWE-200 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/200.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/200.html</a></li></ul>
+</article><article>
+<p class="Info"><strong>Info</strong> · SW-f41c2a8308ed6473</p>
+<h3>Server software metadata advertised</h3><p class="muted">http://127.0.0.1:8000/ · web</p><p>Headers disclose self-reported server software; this does not establish vulnerable versions.</p>
+<h4>Technical Evidence</h4><pre>{
+  &#34;Server&#34;: &#34;ScopeWeaver-Lab/1.0&#34;
+}</pre><h4>Remediation</h4><p>Minimize unnecessary version headers and keep software patched.</p>
+<p>CWE-200 · CVSS: Not assigned; context required</p>
+<p>observed configuration; impact needs contextual review</p><ul><li>
+<a href="https://owasp.org/www-project-secure-headers/" rel="noreferrer">https://owasp.org/www-project-secure-headers/</a></li><li>
+<a href="https://cwe.mitre.org/data/definitions/200.html" rel="noreferrer">https://cwe.mitre.org/data/definitions/200.html</a></li></ul>
+</article>
+<h2>Module Evidence and Limitations</h2><article>
+<h3>network · 127.0.0.1</h3><p>Status: completed</p><pre>{
+  &#34;technique&#34;: &#34;TCP connect; no authentication; passive banners&#34;,
+  &#34;attempted&#34;: 1,
+  &#34;unattempted&#34;: 0
+}</pre>
+</article><article>
+<h3>web · http://127.0.0.1:8000/</h3><p>Status: completed</p><pre>{
+  &#34;http&#34;: {
+    &#34;status&#34;: 200,
+    &#34;ip&#34;: &#34;127.0.0.1&#34;,
+    &#34;body_truncated&#34;: false,
+    &#34;redirect_followed&#34;: false,
+    &#34;cookie_values_stored&#34;: false
+  },
+  &#34;http_methods&#34;: {
+    &#34;status&#34;: 204,
+    &#34;advertised&#34;: [
+      &#34;GET&#34;,
+      &#34;OPTIONS&#34;,
+      &#34;PUT&#34;
+    ],
+    &#34;verified_by_execution&#34;: false
+  }
+}</pre>
+</article>
+<footer><p class="muted">ScopeWeaver · Authorized assessment · Treat this report as confidential.</p></footer>
+</main></body></html>

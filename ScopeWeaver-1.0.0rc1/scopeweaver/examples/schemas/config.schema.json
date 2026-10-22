@@ -1,0 +1,229 @@
+{
+  "$defs": {
+    "DNSConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "servers": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Servers",
+          "type": "array"
+        },
+        "port": {
+          "default": 53,
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "Port",
+          "type": "integer"
+        }
+      },
+      "title": "DNSConfig",
+      "type": "object"
+    },
+    "Limits": {
+      "additionalProperties": false,
+      "properties": {
+        "concurrency": {
+          "default": 4,
+          "maximum": 32,
+          "minimum": 1,
+          "title": "Concurrency",
+          "type": "integer"
+        },
+        "requests_per_second": {
+          "default": 2,
+          "exclusiveMinimum": 0,
+          "maximum": 50,
+          "title": "Requests Per Second",
+          "type": "number"
+        },
+        "max_operations": {
+          "default": 200,
+          "maximum": 100000,
+          "minimum": 1,
+          "title": "Max Operations",
+          "type": "integer"
+        },
+        "timeout": {
+          "default": 4,
+          "exclusiveMinimum": 0,
+          "maximum": 60,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "max_response_bytes": {
+          "default": 131072,
+          "maximum": 1048576,
+          "minimum": 256,
+          "title": "Max Response Bytes",
+          "type": "integer"
+        },
+        "max_targets": {
+          "default": 32,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Max Targets",
+          "type": "integer"
+        }
+      },
+      "title": "Limits",
+      "type": "object"
+    },
+    "ScopeConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "domains": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "title": "Domains",
+          "type": "array"
+        },
+        "networks": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "title": "Networks",
+          "type": "array"
+        },
+        "ports": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 4096,
+          "minItems": 1,
+          "title": "Ports",
+          "type": "array"
+        },
+        "dns": {
+          "$ref": "#/$defs/DNSConfig"
+        },
+        "whois": {
+          "additionalProperties": {
+            "$ref": "#/$defs/WhoisEndpoint"
+          },
+          "title": "Whois",
+          "type": "object"
+        }
+      },
+      "title": "ScopeConfig",
+      "type": "object"
+    },
+    "WhoisEndpoint": {
+      "additionalProperties": false,
+      "properties": {
+        "ip": {
+          "title": "Ip",
+          "type": "string"
+        },
+        "port": {
+          "default": 43,
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "Port",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ip"
+      ],
+      "title": "WhoisEndpoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/ScopeConfig"
+    },
+    "limits": {
+      "$ref": "#/$defs/Limits"
+    },
+    "scan_ports": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 4096,
+      "title": "Scan Ports",
+      "type": "array"
+    },
+    "dns_types": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Dns Types",
+      "type": "array"
+    },
+    "subdomains": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 100,
+      "title": "Subdomains",
+      "type": "array"
+    },
+    "whois_enabled": {
+      "default": false,
+      "title": "Whois Enabled",
+      "type": "boolean"
+    },
+    "tls_legacy_probes": {
+      "default": false,
+      "title": "Tls Legacy Probes",
+      "type": "boolean"
+    },
+    "ca_file": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ca File"
+    },
+    "audit_log": {
+      "default": "scopeweaver-audit.jsonl",
+      "format": "path",
+      "title": "Audit Log",
+      "type": "string"
+    },
+    "stop_file": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Stop File"
+    },
+    "enabled_plugins": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Enabled Plugins",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scope"
+  ],
+  "title": "Config",
+  "type": "object"
+}
